@@ -181,7 +181,7 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
         boolean qOpened = false;
 
         try {
-            stopPreviewAndFreeCamera();
+            stopAndRelease();
 
             mCamera = Camera.open(id);
             qOpened = (mCamera != null);
@@ -264,4 +264,14 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
             mCamera = null;
         }
     }
+
+    void stopAndRelease() {
+        //Fix Surface memory leak
+        destroyDrawingCache();
+        stopPreviewAndFreeCamera();
+        if (mHolder != null) {
+            mHolder.removeCallback(this);
+            mHolder.getSurface().release();
+        }
+     }
 }
