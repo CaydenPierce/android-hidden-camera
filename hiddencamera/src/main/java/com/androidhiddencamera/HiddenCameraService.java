@@ -16,6 +16,7 @@
 
 package com.androidhiddencamera;
 
+import android.util.Log;
 import android.Manifest;
 import android.app.Service;
 import android.content.Context;
@@ -27,6 +28,7 @@ import android.support.annotation.RequiresPermission;
 import android.support.v4.app.ActivityCompat;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.hardware.Camera;
 
 import com.androidhiddencamera.config.CameraFacing;
 
@@ -133,4 +135,5 @@ public abstract class HiddenCameraService extends Service implements CameraCallb
         mWindowManager.addView(cameraSourceCameraPreview, params);
         return cameraSourceCameraPreview;
     }
+
 }

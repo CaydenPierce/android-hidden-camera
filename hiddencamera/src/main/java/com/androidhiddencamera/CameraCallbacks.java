@@ -20,6 +20,8 @@ import android.support.annotation.NonNull;
 
 import java.io.File;
 
+import android.hardware.Camera;
+
 /**
  * Created by Keval on 14-Oct-16.
  *
@@ -30,4 +32,6 @@ interface CameraCallbacks {
     void onImageCapture(@NonNull File imageFile);
 
     void onCameraError(@CameraError.CameraErrorCodes int errorCode);
+    
+    void onPreviewFrame(byte [] data, Camera camera);
 }

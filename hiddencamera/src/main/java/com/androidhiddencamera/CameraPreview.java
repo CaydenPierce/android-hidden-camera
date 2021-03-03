@@ -16,10 +16,14 @@
 
 package com.androidhiddencamera;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.hardware.Camera;
 import android.hardware.Camera;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -42,7 +46,7 @@ import java.util.List;
  */
 
 @SuppressLint("ViewConstructor")
-class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
+class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Camera.PreviewCallback {
     private CameraCallbacks mCameraCallbacks;
 
     private SurfaceHolder mHolder;
@@ -51,6 +55,10 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
     private CameraConfig mCameraConfig;
 
     private volatile boolean safeToTakePicture = false;
+
+    private int count = 0;
+
+    private Long prevTime = 0L;
 
     CameraPreview(@NonNull Context context, CameraCallbacks cameraCallbacks) {
         super(context);
@@ -122,6 +130,9 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
         }
         parameters.setPictureSize(cameraSize.width, cameraSize.height);
 
+        //set recording hint so higher frame rate
+        parameters.setRecordingHint(true);
+
         // Set the focus mode.
         List<String> supportedFocusModes = parameters.getSupportedFocusModes();
         if (supportedFocusModes.contains(mCameraConfig.getFocusMode())) {
@@ -136,6 +147,8 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
             mCamera.setDisplayOrientation(90);
             mCamera.setPreviewDisplay(surfaceHolder);
             mCamera.setPreviewDisplay(surfaceHolder);
+            mCamera.setPreviewCallback(this);
+            mCamera.setPreviewCallback(this);
             mCamera.startPreview();
 
             safeToTakePicture = true;
@@ -264,4 +277,30 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
             mCamera = null;
         }
     }
+
+    //custom code here so that we can grab frames live from the camera preview
+    @Override
+    public void onPreviewFrame(byte[] data, Camera camera) {
+        mCameraCallbacks.onPreviewFrame(data, camera);
+        Log.d("CameraPreview", "" + data[0] + " " + data[1]);
+        Log.d("CameraPreview", "image: " + count);
+        count++;
+        
+        //get frame rate
+        Long nowTime = System.currentTimeMillis();
+        Log.d("CameraPreview", "FPS: " + Long.toString(1000 / (nowTime - prevTime)));
+        prevTime = nowTime;
+
+        //convert to bitmap
+//        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+//        //get size
+//        if (bitmap != null){
+//            int width = bitmap.getWidth();
+//            int height = bitmap.getHeight();
+//            Log.d("CameraPreview", Integer.toString(width) + "x" + Integer.toString(height));
+//        } else {
+//            Log.d("CameraPreview", "bitmap was null");
+//        }
+    }
+
 }

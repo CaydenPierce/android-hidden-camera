@@ -33,6 +33,7 @@ import com.androidhiddencamera.config.CameraFacing;
 import com.androidhiddencamera.config.CameraFocus;
 import com.androidhiddencamera.config.CameraImageFormat;
 import com.androidhiddencamera.config.CameraResolution;
+import android.hardware.Camera;
 
 import java.io.File;
 
@@ -128,5 +129,9 @@ public class DemoCamService extends HiddenCameraService {
         }
 
         stopSelf();
+    }
+
+    @Override
+    public void onPreviewFrame(byte [] data, Camera camera){
     }
 }

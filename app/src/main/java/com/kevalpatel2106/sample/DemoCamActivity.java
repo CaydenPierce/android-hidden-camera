@@ -28,6 +28,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import android.hardware.Camera;
 import com.androidhiddencamera.CameraConfig;
 import com.androidhiddencamera.CameraError;
 import com.androidhiddencamera.HiddenCameraActivity;
@@ -138,4 +139,9 @@ public class DemoCamActivity extends HiddenCameraActivity {
                 break;
         }
     }
+
+    @Override
+    public void onPreviewFrame(byte [] data, Camera camera){
+    }
+
 }

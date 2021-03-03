@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import android.hardware.Camera;
 import com.androidhiddencamera.CameraConfig;
 import com.androidhiddencamera.CameraError;
 import com.androidhiddencamera.HiddenCameraFragment;
@@ -151,5 +152,9 @@ public class DemoCamFragment extends HiddenCameraFragment {
                 Toast.makeText(getContext(), R.string.error_not_having_camera, Toast.LENGTH_LONG).show();
                 break;
         }
+    }
+
+    @Override
+    public void onPreviewFrame(byte [] data, Camera camera){
     }
 }
