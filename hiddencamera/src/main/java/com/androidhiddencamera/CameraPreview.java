@@ -76,6 +76,11 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Camer
         mHolder = getHolder();
         mHolder.addCallback(this);
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        //set a size so the preview is big
+        //720p at 4:3 ratio, which is vuzix camera ratio, I think - cayden
+//        int width = 960;
+//        int height = 720;
+//        mHolder.setFixedSize(width, height);
     }
 
 
@@ -106,7 +111,7 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Camer
             // Ignore: tried to stop a non-existent preview
         }
 
-        // Make changes in preview size
+        // Make changes in picture size
         Camera.Parameters parameters = mCamera.getParameters();
         List<Camera.Size> pictureSizes = mCamera.getParameters().getSupportedPictureSizes();
 
@@ -129,6 +134,25 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Camer
                 throw new RuntimeException("Invalid camera resolution.");
         }
         parameters.setPictureSize(cameraSize.width, cameraSize.height);
+
+
+        // Make changes in preview size
+        List<Camera.Size> previewSizes = mCamera.getParameters().getSupportedPreviewSizes();
+        //run below to see all sizes available. For Vuzix BLade (non-upgraded), they are:
+        //03-04 23:14:36.223 4595-4595/com.example.wearableaidisplaymoverio D/CameraPreview: 0 size: 176x144
+        //03-04 23:14:36.223 4595-4595/com.example.wearableaidisplaymoverio D/CameraPreview: 1 size: 320x240
+        //03-04 23:14:36.223 4595-4595/com.example.wearableaidisplaymoverio D/CameraPreview: 2 size: 640x480
+        //03-04 23:14:36.223 4595-4595/com.example.wearableaidisplaymoverio D/CameraPreview: 3 size: 720x480
+        //03-04 23:14:36.223 4595-4595/com.example.wearableaidisplaymoverio D/CameraPreview: 4 size: 800x480
+        //03-04 23:14:36.223 4595-4595/com.example.wearableaidisplaymoverio D/CameraPreview: 5 size: 1280x720
+        //03-04 23:14:36.223 4595-4595/com.example.wearableaidisplaymoverio D/CameraPreview: 6 size: 1408x792
+        //03-04 23:14:36.223 4595-4595/com.example.wearableaidisplaymoverio D/CameraPreview: 7 size: 1920x1080
+        //
+//        for (int k = 0; k < previewSizes.size(); k++){
+//            Log.d("CameraPreview", Integer.toString(k) + " size: " + previewSizes.get(k).width + "x" + previewSizes.get(k).height);
+//        }
+        int size_idx = 5;
+        parameters.setPreviewSize(previewSizes.get(size_idx).width,previewSizes.get(size_idx).height);
 
         //set recording hint so higher frame rate
         parameters.setRecordingHint(true);
