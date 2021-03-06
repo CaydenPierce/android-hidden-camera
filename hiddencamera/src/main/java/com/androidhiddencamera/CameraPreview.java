@@ -151,7 +151,7 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Camer
 //        for (int k = 0; k < previewSizes.size(); k++){
 //            Log.d("CameraPreview", Integer.toString(k) + " size: " + previewSizes.get(k).width + "x" + previewSizes.get(k).height);
 //        }
-        int size_idx = 5;
+        int size_idx = 2;
         parameters.setPreviewSize(previewSizes.get(size_idx).width,previewSizes.get(size_idx).height);
 
         //set recording hint so higher frame rate
@@ -306,14 +306,11 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Camer
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
         mCameraCallbacks.onPreviewFrame(data, camera);
-        Log.d("CameraPreview", "" + data[0] + " " + data[1]);
-        Log.d("CameraPreview", "image: " + count);
         count++;
         
         //get frame rate
-        Long nowTime = System.currentTimeMillis();
-        Log.d("CameraPreview", "FPS: " + Long.toString(1000 / (nowTime - prevTime)));
-        prevTime = nowTime;
+//        Long nowTime = System.currentTimeMillis();
+//        prevTime = nowTime;
 
         //convert to bitmap
 //        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
